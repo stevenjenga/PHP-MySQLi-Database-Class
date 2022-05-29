@@ -246,6 +246,8 @@ class MysqliDb
     
     public $autoReconnect = true;
     protected $autoReconnectCount = 0;
+    
+    public $db_name = '';
 
     /**
      * @var bool Operations in transaction indicator
@@ -291,6 +293,8 @@ class MysqliDb
             $this->setPrefix($prefix);
         }
 
+        $this->db_name = $db;
+        
         self::$_instance = $this;
     }
 
@@ -417,6 +421,16 @@ class MysqliDb
         return $this->_mysqli[$this->defConnectionName];
     }
 
+    /**
+     * A method to get the name of the db
+     *
+     * @return db_name
+     */
+    public function getdbName()
+    {
+        return $this->db_name;
+    }
+    
     /**
      * A method of returning the static instance to allow access to the
      * instantiated object from within another class.
@@ -2070,11 +2084,11 @@ class MysqliDb
     /**
      * Method returns last executed query
      *
-     * @return string
+     * @return array
      */
     public function getLastQuery()
     {
-        return $this->_lastQuery;
+        return array($this->_lastQuery);
     }
 
     /**
