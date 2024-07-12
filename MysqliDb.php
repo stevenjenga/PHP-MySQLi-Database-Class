@@ -672,6 +672,7 @@ class MysqliDb
      */
     public function query($query, $numRows = null)
     {
+        $this->reset();
         $this->_query = $query;
         $stmt = $this->_buildQuery($numRows);
         $stmt->execute();
@@ -844,7 +845,7 @@ class MysqliDb
      */
     public function insert($tableName, $insertData)
     {
-        return $this->_buildInsert($tableName, $insertData, 'INSERT');
+        return $this->_buildInsert(strtolower($tableName), $insertData, 'INSERT');
     }
 
     /**
@@ -935,7 +936,7 @@ class MysqliDb
             return;
         }
 
-        $this->_query = "UPDATE " . self::$prefix . $tableName;
+        $this->_query = "UPDATE " . self::$prefix . strtolower($tableName);
 
         $stmt = $this->_buildQuery($numRows, $tableData);
         $status = $stmt->execute();
@@ -963,7 +964,7 @@ class MysqliDb
             return;
         }
 
-        $table = self::$prefix . $tableName;
+        $table = self::$prefix . strtolower($tableName);
 
         if (count($this->_join)) {
             $this->_query = "DELETE " . preg_replace('/.* (.*)/', '$1', $table) . " FROM " . $table;
